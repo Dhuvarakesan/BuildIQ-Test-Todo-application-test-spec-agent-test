@@ -1,5 +1,5 @@
 schema_version: repo-map.v1
-commit: c02f160                      # repo commit this map describes; a mismatch flags a stale map
+commit: 9dc54b3                      # repo commit this map describes; a mismatch flags a stale map
 
 protected:                           # paths the coding agent must not edit
   - .codex/
@@ -12,27 +12,29 @@ layers:
     frontend/src/App.tsx: "Frontend app component; calls useTodos() and passes todo state into AppShell."
     frontend/src/components/AppShell.tsx: "Frontend layout shell; renders header, creation form, todo count summary, storage warning, todo list and local-only notice."
     frontend/src/components/StorageWarning.tsx: "Storage warning component; displays non-blocking localStorage failure messaging with role=status."
-    frontend/src/components/TodoForm.tsx: "Todo creation form; manages title, description, validation error and success state, then calls onCreateTodo()."
-    frontend/src/components/TodoList.tsx: "Todo list display; renders saved todos, empty state, item descriptions and TodoStatusBadge for each todo."
-    frontend/src/components/TodoStatusBadge.tsx: "Todo status badge; converts TodoCompletion to display text with getTodoDisplayStatus()."
-    frontend/src/hooks/useTodos.ts: "Todo state hook; loads todos from storage, creates Not Complete todos, persists changes and exposes storage error state."
-    frontend/src/index.css: "Tailwind stylesheet; defines base browser styles, focus states, form controls and shared surface/status component classes."
+    frontend/src/components/TodoEditForm.tsx: "Todo edit form; manages editable title, description and status fields, validates required titles and calls onSave()/onCancel()."
+    frontend/src/components/TodoForm.tsx: "Todo creation form; manages controlled title/description fields, inline required-title validation, count text and success state."
+    frontend/src/components/TodoList.tsx: "Todo list display; renders saved todos, empty state, TodoStatusBadge and per-item editing via TodoEditForm."
+    frontend/src/components/TodoStatusBadge.tsx: "Todo status badge; maps TodoCompletion values to status classes and display labels from getTodoDisplayStatus()."
+    frontend/src/hooks/useTodos.ts: "Todo state hook; loads todos from storage, creates default Not Complete todos, updates existing todos, persists changes and exposes storage error state."
+    frontend/src/index.css: "Frontend Tailwind stylesheet; defines base browser styles, focus states, form controls, surfaces, status badges and edit button classes."
     frontend/src/main.tsx: "React bootstrap; validates #root, creates the React root and renders App inside StrictMode."
     frontend/src/storage/todoStorage.ts: "localStorage adapter; reads/writes versioned todo payloads, validates stored records and returns recoverable failure results."
-    frontend/src/types/todo.ts: "Todo domain types and constants; defines CreateTodoInput, Todo, storage result types and getTodoDisplayStatus()."
+    frontend/src/types/todo.ts: "Todo domain types and constants; defines completion statuses, create/update inputs, storage result types, isTodoCompletion() and getTodoDisplayStatus()."
     index.html: "Root HTML entry document; defines root mount node, viewport metadata, description and module script for /src/main.tsx."
     src/App.tsx: "Root app component; renders AppShell for the root Vite application."
     src/components/AppShell.tsx: "Root layout shell; wires useTodos() to TodoForm and TodoList, then renders todo count and local-only messaging."
     src/components/TodoForm.tsx: "Root todo creation form; manages controlled title/description fields, inline required-title validation and success state."
     src/components/TodoList.tsx: "Root todo list display; renders saved todos, empty state, descriptions and TodoStatusBadge items."
-    src/components/TodoStatusBadge.tsx: "Root todo status badge; displays the label from getTodoDisplayStatus() for a TodoCompletion value."
+    src/components/TodoStatusBadge.tsx: "Root todo status badge; displays the Not Complete label from getTodoDisplayStatus() for a boolean completion value."
     src/hooks/useTodos.ts: "Root todo state hook; creates in-memory Not Complete todos with generated ids and exposes createTodo()."
     src/index.css: "Root Tailwind stylesheet; defines base page styles, focus states, form controls and shared surface/status component classes."
     src/main.tsx: "Root React bootstrap; validates #root, creates the React root and renders App inside StrictMode."
-    src/types/todo.ts: "Root todo domain types and constants; defines CreateTodoInput, Todo, TodoCompletion and getTodoDisplayStatus()."
+    src/types/todo.ts: "Root todo domain types and constants; defines CreateTodoInput, Todo, boolean TodoCompletion and getTodoDisplayStatus()."
 
   config:
     .gitignore: "Repository ignore rules; excludes dependencies, build output, caches, virtual environments, local databases, env files and validation reports."
+    context/repo-map.yaml: "Repository map; records protected paths and one-line descriptions for tracked non-lock files grouped by layer."
     frontend/eslint.config.js: "Frontend ESLint flat config; combines JavaScript, TypeScript, React Hooks and React Refresh rules with generated-output ignores."
     frontend/package.json: "Frontend npm manifest; defines Vite scripts and React, TypeScript, Tailwind, ESLint and Vite dependencies."
     frontend/postcss.config.js: "Frontend PostCSS config; enables Tailwind CSS and Autoprefixer plugins."
@@ -46,5 +48,5 @@ layers:
 
   docs:
     README.md: "Repository README; identifies the Todo-application-test-spec-agent-test project."
-    docs/ard.md: "Architecture requirements document; records the frontend-only React architecture, localStorage persistence, component boundaries and constraints."
-    docs/prd.md: "Product requirements document; defines Simple Todo scope, personas, requirements, acceptance criteria and out-of-scope features."
+    docs/ard.md: "Architecture requirements document; records the frontend-only React architecture, localStorage persistence, component boundaries, deployment model and constraints."
+    docs/prd.md: "Product requirements document; defines Simple Todo scope, personas, functional requirements, non-functional requirements, acceptance criteria and out-of-scope features."
