@@ -47,9 +47,17 @@ export type Todo = {
   createdAt: string;
 };
 
+export type TodoStorageRecord = {
+  id: string;
+  title: string;
+  description?: string;
+  status: TodoCompletion;
+  createdAt: string;
+};
+
 export type TodoStoragePayload = {
   version: 1;
-  todos: Todo[];
+  todos: TodoStorageRecord[];
 };
 
 export type TodoStorageFailureReason =
