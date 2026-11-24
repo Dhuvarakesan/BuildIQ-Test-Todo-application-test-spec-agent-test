@@ -1,11 +1,31 @@
-export const TODO_NOT_COMPLETE_STATUS = 'Not Complete' as const;
-
-const TODO_STATUS_LABELS = {
-  false: TODO_NOT_COMPLETE_STATUS,
+export const TODO_COMPLETION = {
+  NOT_COMPLETE: 'not_complete',
+  IN_PROGRESS: 'in_progress',
+  COMPLETE: 'complete',
 } as const;
 
-export type TodoDisplayStatus = typeof TODO_NOT_COMPLETE_STATUS;
-export type TodoCompletion = false;
+export const TODO_COMPLETION_VALUES = [
+  TODO_COMPLETION.NOT_COMPLETE,
+  TODO_COMPLETION.IN_PROGRESS,
+  TODO_COMPLETION.COMPLETE,
+] as const;
+
+export type TodoCompletion = (typeof TODO_COMPLETION_VALUES)[number];
+
+export const DEFAULT_TODO_COMPLETION = TODO_COMPLETION.NOT_COMPLETE;
+
+export const TODO_NOT_COMPLETE_STATUS = 'Not Complete' as const;
+export const TODO_IN_PROGRESS_STATUS = 'In Progress' as const;
+export const TODO_COMPLETE_STATUS = 'Complete' as const;
+
+export const TODO_STATUS_LABELS = {
+  [TODO_COMPLETION.NOT_COMPLETE]: TODO_NOT_COMPLETE_STATUS,
+  [TODO_COMPLETION.IN_PROGRESS]: TODO_IN_PROGRESS_STATUS,
+  [TODO_COMPLETION.COMPLETE]: TODO_COMPLETE_STATUS,
+} as const satisfies Record<TodoCompletion, string>;
+
+export type TodoDisplayStatus =
+  (typeof TODO_STATUS_LABELS)[keyof typeof TODO_STATUS_LABELS];
 
 export type CreateTodoInput = {
   title: string;
@@ -54,10 +74,15 @@ export type TodoSaveResult =
       message: string;
     };
 
+export function isTodoCompletion(value: unknown): value is TodoCompletion {
+  return (
+    typeof value === 'string'
+    && TODO_COMPLETION_VALUES.some((status) => status === value)
+  );
+}
+
 export function getTodoDisplayStatus(
   completed: TodoCompletion,
 ): TodoDisplayStatus {
-  const statusKey = String(completed) as keyof typeof TODO_STATUS_LABELS;
-
-  return TODO_STATUS_LABELS[statusKey];
+  return TODO_STATUS_LABELS[completed];
 }
