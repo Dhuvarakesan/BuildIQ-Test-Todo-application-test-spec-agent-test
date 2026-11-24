@@ -39,6 +39,17 @@ const statusOptions = [
   },
 ] as const;
 
+const titleInputClassName = [
+  'px-3 py-2 text-base',
+  'aria-[invalid=true]:border-accent-600',
+  'aria-[invalid=true]:bg-accent-50',
+].join(' ');
+
+const titleErrorClassName = [
+  'rounded-lg border border-accent-200 bg-accent-50 px-3 py-2',
+  'text-sm font-medium leading-5 text-accent-800',
+].join(' ');
+
 function getInitialTodoState(todo: Todo): EditableTodoState {
   return {
     todoId: todo.id,
@@ -134,14 +145,15 @@ function TodoEditForm({ todo, onSave, onCancel }: TodoEditFormProps) {
     <form className="todo-edit-form" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-2">
         <label className="text-sm font-semibold" htmlFor={titleInputId}>
-          Task title <span className="text-rose-700" aria-hidden="true">*</span>
+          Task title{' '}
+          <span className="text-accent-700" aria-hidden="true">*</span>
         </label>
         <input
           aria-describedby={titleDescriptionIds}
           aria-invalid={Boolean(currentEditState.titleError)}
           aria-required="true"
           autoComplete="off"
-          className="px-3 py-2 text-base aria-[invalid=true]:border-rose-500"
+          className={titleInputClassName}
           id={titleInputId}
           name="title"
           onChange={(event) => handleTitleChange(event.target.value)}
@@ -153,7 +165,7 @@ function TodoEditForm({ todo, onSave, onCancel }: TodoEditFormProps) {
         </p>
         {currentEditState.titleError ? (
           <p
-            className="text-sm font-medium leading-5 text-rose-700"
+            className={titleErrorClassName}
             id={titleErrorId}
             role="alert"
           >
