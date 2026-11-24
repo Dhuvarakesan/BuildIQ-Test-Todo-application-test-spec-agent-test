@@ -5,18 +5,21 @@ export default {
     extend: {
       colors: {
         accent: {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
+          50: '#fff1f2',
+          100: '#ffe4e6',
+          200: '#fecdd3',
+          500: '#f43f5e',
+          600: '#e11d48',
+          700: '#be123c',
+          800: '#9f1239',
+          900: '#881337',
         },
-        ink: '#17211b',
-        paper: '#f7f3ea',
-        surface: '#fffdf8',
+        ink: '#2a1014',
+        paper: '#fff5f6',
+        surface: '#fffafb',
       },
       boxShadow: {
-        card: '0 18px 48px -28px rgb(23 33 27 / 0.35)',
+        card: '0 18px 48px -28px rgb(190 18 60 / 0.32)',
       },
       fontFamily: {
         sans: [
