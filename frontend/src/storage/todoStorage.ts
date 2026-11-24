@@ -5,6 +5,7 @@ import {
   type TodoSaveResult,
   type TodoStorageFailureReason,
   type TodoStoragePayload,
+  type TodoStorageRecord,
 } from '../types/todo';
 
 export const TODO_STORAGE_KEY = 'simple-todo.todos';
@@ -77,21 +78,21 @@ function isIsoDateString(value: unknown): value is string {
   return !Number.isNaN(parsedTime) && new Date(parsedTime).toISOString() === value;
 }
 
-function isTodo(value: unknown): value is Todo {
+function getStoredDescription(value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim() !== '' ? value : undefined;
+}
+
+function isTodoStorageRecord(value: unknown): value is TodoStorageRecord {
   if (!isRecord(value)) {
     return false;
   }
-
-  const hasValidDescription =
-    value.description === undefined || typeof value.description === 'string';
 
   return (
     typeof value.id === 'string'
     && value.id.trim() !== ''
     && typeof value.title === 'string'
     && value.title.trim() !== ''
-    && hasValidDescription
-    && isTodoCompletion(value.completed)
+    && isTodoCompletion(value.status)
     && isIsoDateString(value.createdAt)
   );
 }
@@ -104,8 +105,30 @@ function isTodoStoragePayload(value: unknown): value is TodoStoragePayload {
   return (
     value.version === TODO_STORAGE_VERSION
     && Array.isArray(value.todos)
-    && value.todos.every(isTodo)
+    && value.todos.every(isTodoStorageRecord)
   );
+}
+
+function toTodo(todoRecord: TodoStorageRecord): Todo {
+  const description = getStoredDescription(todoRecord.description);
+
+  return {
+    id: todoRecord.id,
+    title: todoRecord.title,
+    completed: todoRecord.status,
+    createdAt: todoRecord.createdAt,
+    ...(description ? { description } : {}),
+  };
+}
+
+function toTodoStorageRecord(todo: Todo): TodoStorageRecord {
+  return {
+    id: todo.id,
+    title: todo.title,
+    description: todo.description ?? '',
+    status: todo.completed,
+    createdAt: todo.createdAt,
+  };
 }
 
 export function loadTodos(): TodoLoadResult {
@@ -144,7 +167,7 @@ export function loadTodos(): TodoLoadResult {
 
   return {
     ok: true,
-    todos: parsedValue.todos,
+    todos: parsedValue.todos.map(toTodo),
   };
 }
 
@@ -157,7 +180,7 @@ export function saveTodos(todos: Todo[]): TodoSaveResult {
 
   const payload: TodoStoragePayload = {
     version: TODO_STORAGE_VERSION,
-    todos,
+    todos: todos.map(toTodoStorageRecord),
   };
 
   try {

@@ -8,9 +8,10 @@ function StorageWarning({ message }: StorageWarningProps) {
       className="status-warning rounded-lg border p-4 text-sm leading-6"
       role="status"
     >
-      <p className="font-semibold">Storage is unavailable.</p>
+      <p className="font-semibold">Storage warning</p>
       <p className="mt-1">
-        {message} Todos may not remain after you refresh this browser.
+        {message} You can keep using this list, but recent changes may only be
+        available until this page is refreshed.
       </p>
     </div>
   );
