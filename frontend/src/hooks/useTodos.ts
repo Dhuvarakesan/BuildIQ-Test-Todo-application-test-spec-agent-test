@@ -48,6 +48,15 @@ export function useTodos(): UseTodosResult {
     };
   });
 
+  const commitTodos = (nextTodos: Todo[]) => {
+    const saveResult = saveTodos(nextTodos);
+
+    setTodoState({
+      todos: nextTodos,
+      storageError: saveResult.ok ? null : saveResult.message,
+    });
+  };
+
   const createTodo = (input: CreateTodoInput) => {
     const title = input.title.trim();
 
@@ -66,12 +75,7 @@ export function useTodos(): UseTodosResult {
 
     const nextTodos = [...todoState.todos, todo];
 
-    const saveResult = saveTodos(nextTodos);
-
-    setTodoState({
-      todos: nextTodos,
-      storageError: saveResult.ok ? todoState.storageError : saveResult.message,
-    });
+    commitTodos(nextTodos);
 
     return todo;
   };
@@ -108,12 +112,7 @@ export function useTodos(): UseTodosResult {
       todo.id === input.id ? updatedTodo : todo
     ));
 
-    const saveResult = saveTodos(nextTodos);
-
-    setTodoState({
-      todos: nextTodos,
-      storageError: saveResult.ok ? todoState.storageError : saveResult.message,
-    });
+    commitTodos(nextTodos);
 
     return {
       ok: true,
