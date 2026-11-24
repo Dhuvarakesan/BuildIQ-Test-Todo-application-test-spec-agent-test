@@ -128,7 +128,7 @@
   }
 
   .status-warning {
-    @apply border-amber-200 bg-amber-50 text-amber-900;
+    @apply border-accent-200 bg-accent-50 text-accent-900;
   }
 
   .status-badge {
@@ -136,15 +136,15 @@
   }
 
   .status-badge-not-complete {
-    @apply border-neutral-300 bg-neutral-50 text-neutral-700;
+    @apply border-accent-200 bg-accent-50 text-accent-800;
   }
 
   .status-badge-in-progress {
-    @apply border-amber-200 bg-amber-50 text-amber-900;
+    @apply border-accent-200 bg-accent-100 text-accent-900;
   }
 
   .status-badge-complete {
-    @apply border-accent-100 bg-accent-50 text-accent-800;
+    @apply border-accent-200 bg-accent-700 text-white;
   }
 
   .todo-edit-form {
@@ -156,10 +156,10 @@
   }
 
   .button-primary {
-    @apply rounded-lg bg-accent-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-800;
+    @apply rounded-lg bg-accent-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-800 active:bg-accent-900 disabled:bg-accent-300 disabled:text-white;
   }
 
   .button-secondary {
-    @apply rounded-lg border border-neutral-300 bg-surface px-4 py-2 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-50;
+    @apply rounded-lg border border-accent-200 bg-surface px-4 py-2 text-sm font-semibold text-accent-800 transition hover:border-accent-300 hover:bg-accent-50 active:bg-accent-100 disabled:border-accent-100 disabled:bg-accent-50 disabled:text-accent-300;
   }
 }
