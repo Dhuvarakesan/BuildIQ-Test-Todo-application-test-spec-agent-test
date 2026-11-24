@@ -1,7 +1,11 @@
 import { useState } from 'react';
 
 import { loadTodos, saveTodos } from '../storage/todoStorage';
-import type { CreateTodoInput, Todo } from '../types/todo';
+import {
+  DEFAULT_TODO_COMPLETION,
+  type CreateTodoInput,
+  type Todo,
+} from '../types/todo';
 
 export type CreateTodoResult = Todo | null;
 
@@ -42,7 +46,7 @@ export function useTodos(): UseTodosResult {
     const todo: Todo = {
       id: createTodoId(),
       title,
-      completed: false,
+      completed: DEFAULT_TODO_COMPLETION,
       createdAt: new Date().toISOString(),
       ...(description ? { description } : {}),
     };
