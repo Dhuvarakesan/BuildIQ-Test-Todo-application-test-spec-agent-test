@@ -8,6 +8,13 @@ export type CreateTodoResult = Todo | null;
 export type UseTodosResult = {
   todos: Todo[];
   createTodo: (input: CreateTodoInput) => CreateTodoResult;
+  storageError: string | null;
+  storageUnavailable: boolean;
+};
+
+type TodoState = {
+  todos: Todo[];
+  storageError: string | null;
 };
 
 function createTodoId() {
@@ -15,10 +22,13 @@ function createTodoId() {
 }
 
 export function useTodos(): UseTodosResult {
-  const [todos, setTodos] = useState<Todo[]>(() => {
+  const [todoState, setTodoState] = useState<TodoState>(() => {
     const loadResult = loadTodos();
 
-    return loadResult.todos;
+    return {
+      todos: loadResult.todos,
+      storageError: loadResult.ok ? null : loadResult.message,
+    };
   });
 
   const createTodo = (input: CreateTodoInput) => {
@@ -37,16 +47,22 @@ export function useTodos(): UseTodosResult {
       ...(description ? { description } : {}),
     };
 
-    const nextTodos = [...todos, todo];
+    const nextTodos = [...todoState.todos, todo];
 
-    setTodos(nextTodos);
-    saveTodos(nextTodos);
+    const saveResult = saveTodos(nextTodos);
+
+    setTodoState({
+      todos: nextTodos,
+      storageError: saveResult.ok ? todoState.storageError : saveResult.message,
+    });
 
     return todo;
   };
 
   return {
-    todos,
+    todos: todoState.todos,
     createTodo,
+    storageError: todoState.storageError,
+    storageUnavailable: todoState.storageError !== null,
   };
 }

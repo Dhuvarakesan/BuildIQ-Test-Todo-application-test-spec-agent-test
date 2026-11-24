@@ -1,10 +1,20 @@
+import StorageWarning from './StorageWarning';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
-import { useTodos } from '../hooks/useTodos';
+import type { UseTodosResult } from '../hooks/useTodos';
 import { TODO_NOT_COMPLETE_STATUS } from '../types/todo';
 
-function AppShell() {
-  const { todos, createTodo } = useTodos();
+export type AppShellProps = {
+  todoState: UseTodosResult;
+};
+
+function AppShell({ todoState }: AppShellProps) {
+  const {
+    todos,
+    createTodo,
+    storageError,
+    storageUnavailable,
+  } = todoState;
   const todoCount = todos.length;
   const todoCountLabel = todoCount === 1
     ? '1 todo in your current list'
@@ -42,6 +52,10 @@ function AppShell() {
             you need extra context.
           </p>
         </div>
+
+        {storageUnavailable && storageError ? (
+          <StorageWarning message={storageError} />
+        ) : null}
 
         <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_16rem]">
           <section
