@@ -1,4 +1,5 @@
 import TodoForm from './TodoForm';
+import TodoList from './TodoList';
 import { useTodos } from '../hooks/useTodos';
 import { TODO_NOT_COMPLETE_STATUS } from '../types/todo';
 
@@ -42,7 +43,7 @@ function AppShell() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_16rem]">
           <section
             aria-labelledby="create-region-title"
             className="surface-card p-5"
@@ -74,6 +75,8 @@ function AppShell() {
             </p>
           </aside>
         </div>
+
+        <TodoList todos={todos} />
 
         <p className="status-warning rounded-lg border p-4 text-sm leading-6">
           Todos stay in this browser. Simple Todo does not use a backend service,
