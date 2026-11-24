@@ -1,4 +1,14 @@
+import TodoForm from './TodoForm';
+import { useTodos } from '../hooks/useTodos';
+import { TODO_NOT_COMPLETE_STATUS } from '../types/todo';
+
 function AppShell() {
+  const { todos, createTodo } = useTodos();
+  const todoCount = todos.length;
+  const todoCountLabel = todoCount === 1
+    ? '1 todo in your current list'
+    : `${todoCount} todos in your current list`;
+
   return (
     <div className="min-h-screen bg-paper text-ink">
       <header className="border-b border-neutral-200 bg-surface">
@@ -24,35 +34,46 @@ function AppShell() {
             Single-screen workspace
           </p>
           <h2 id="todo-experience-title" className="text-xl font-semibold">
-            Todo experience
+            Create your next todo
           </h2>
+          <p className="max-w-2xl text-sm leading-6 text-neutral-600">
+            Give each todo a required title and add an optional description when
+            you need extra context.
+          </p>
         </div>
 
-        <section
-          aria-labelledby="create-region-title"
-          className="surface-card p-5"
-          id="create-todo"
-        >
-          <h3 id="create-region-title" className="text-lg font-semibold">
-            Create a todo
-          </h3>
-          <p className="mt-2 text-sm leading-6 text-neutral-600">
-            A title field and optional description will appear here in the next feature.
-          </p>
-        </section>
+        <div className="flex flex-col gap-5">
+          <section
+            aria-labelledby="create-region-title"
+            className="surface-card p-5"
+            id="create-todo"
+          >
+            <div className="space-y-2">
+              <h3 id="create-region-title" className="text-lg font-semibold">
+                New todo
+              </h3>
+              <p className="text-sm leading-6 text-neutral-600">
+                Title is required. Description is optional, and every new todo
+                starts as {TODO_NOT_COMPLETE_STATUS}.
+              </p>
+            </div>
+            <TodoForm onCreateTodo={createTodo} todoCount={todoCount} />
+          </section>
 
-        <section
-          aria-labelledby="todo-list-region-title"
-          className="surface-card p-5"
-          id="todo-list"
-        >
-          <h3 id="todo-list-region-title" className="text-lg font-semibold">
-            Todo list
-          </h3>
-          <p className="mt-2 text-sm leading-6 text-neutral-600">
-            Saved todos will appear here on this device with their current status.
-          </p>
-        </section>
+          <aside
+            aria-label="Current todo list context"
+            className="surface-card p-5"
+          >
+            <p className="text-sm font-medium text-accent-700">
+              Current list
+            </p>
+            <p className="mt-1 text-2xl font-semibold">{todoCount}</p>
+            <p className="mt-2 text-sm leading-6 text-neutral-600">
+              {todoCountLabel}. Newly created todos appear as{' '}
+              {TODO_NOT_COMPLETE_STATUS} in the current list.
+            </p>
+          </aside>
+        </div>
 
         <p className="status-warning rounded-lg border p-4 text-sm leading-6">
           Todos stay in this browser. Simple Todo does not use a backend service,
