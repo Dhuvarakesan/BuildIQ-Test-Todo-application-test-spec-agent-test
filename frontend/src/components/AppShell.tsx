@@ -12,6 +12,7 @@ function AppShell({ todoState }: AppShellProps) {
   const {
     todos,
     createTodo,
+    updateTodo,
     storageError,
     storageUnavailable,
   } = todoState;
@@ -90,7 +91,7 @@ function AppShell({ todoState }: AppShellProps) {
           </aside>
         </div>
 
-        <TodoList todos={todos} />
+        <TodoList todos={todos} onUpdateTodo={updateTodo} />
 
         <p className="status-warning rounded-lg border p-4 text-sm leading-6">
           Todos stay in this browser. Simple Todo does not use a backend service,
