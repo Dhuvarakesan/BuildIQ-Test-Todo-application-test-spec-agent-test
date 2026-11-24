@@ -1,9 +1,10 @@
-import type {
-  Todo,
-  TodoLoadResult,
-  TodoSaveResult,
-  TodoStorageFailureReason,
-  TodoStoragePayload,
+import {
+  isTodoCompletion,
+  type Todo,
+  type TodoLoadResult,
+  type TodoSaveResult,
+  type TodoStorageFailureReason,
+  type TodoStoragePayload,
 } from '../types/todo';
 
 export const TODO_STORAGE_KEY = 'simple-todo.todos';
@@ -90,7 +91,7 @@ function isTodo(value: unknown): value is Todo {
     && typeof value.title === 'string'
     && value.title.trim() !== ''
     && hasValidDescription
-    && value.completed === false
+    && isTodoCompletion(value.completed)
     && isIsoDateString(value.createdAt)
   );
 }
