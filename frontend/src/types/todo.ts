@@ -20,6 +20,40 @@ export type Todo = {
   createdAt: string;
 };
 
+export type TodoStoragePayload = {
+  version: 1;
+  todos: Todo[];
+};
+
+export type TodoStorageFailureReason =
+  | 'storage-unavailable'
+  | 'read-failed'
+  | 'write-failed'
+  | 'parse-failed'
+  | 'invalid-payload';
+
+export type TodoLoadResult =
+  | {
+      ok: true;
+      todos: Todo[];
+    }
+  | {
+      ok: false;
+      todos: Todo[];
+      reason: TodoStorageFailureReason;
+      message: string;
+    };
+
+export type TodoSaveResult =
+  | {
+      ok: true;
+    }
+  | {
+      ok: false;
+      reason: TodoStorageFailureReason;
+      message: string;
+    };
+
 export function getTodoDisplayStatus(
   completed: TodoCompletion,
 ): TodoDisplayStatus {

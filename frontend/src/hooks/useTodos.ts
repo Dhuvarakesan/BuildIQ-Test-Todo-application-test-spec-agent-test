@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { loadTodos, saveTodos } from '../storage/todoStorage';
 import type { CreateTodoInput, Todo } from '../types/todo';
 
 export type CreateTodoResult = Todo | null;
@@ -7,6 +8,13 @@ export type CreateTodoResult = Todo | null;
 export type UseTodosResult = {
   todos: Todo[];
   createTodo: (input: CreateTodoInput) => CreateTodoResult;
+  storageError: string | null;
+  storageUnavailable: boolean;
+};
+
+type TodoState = {
+  todos: Todo[];
+  storageError: string | null;
 };
 
 function createTodoId() {
@@ -14,7 +22,14 @@ function createTodoId() {
 }
 
 export function useTodos(): UseTodosResult {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoState, setTodoState] = useState<TodoState>(() => {
+    const loadResult = loadTodos();
+
+    return {
+      todos: loadResult.todos,
+      storageError: loadResult.ok ? null : loadResult.message,
+    };
+  });
 
   const createTodo = (input: CreateTodoInput) => {
     const title = input.title.trim();
@@ -32,13 +47,22 @@ export function useTodos(): UseTodosResult {
       ...(description ? { description } : {}),
     };
 
-    setTodos((currentTodos) => [...currentTodos, todo]);
+    const nextTodos = [...todoState.todos, todo];
+
+    const saveResult = saveTodos(nextTodos);
+
+    setTodoState({
+      todos: nextTodos,
+      storageError: saveResult.ok ? todoState.storageError : saveResult.message,
+    });
 
     return todo;
   };
 
   return {
-    todos,
+    todos: todoState.todos,
     createTodo,
+    storageError: todoState.storageError,
+    storageUnavailable: todoState.storageError !== null,
   };
 }
