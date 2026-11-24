@@ -1,15 +1,21 @@
+import { useState } from 'react';
+
+import TodoEditForm from './TodoEditForm';
 import TodoStatusBadge from './TodoStatusBadge';
+import type { UseTodosResult } from '../hooks/useTodos';
 import type { Todo } from '../types/todo';
 
 export type TodoListProps = {
   todos: Todo[];
+  onUpdateTodo: UseTodosResult['updateTodo'];
 };
 
 function getTodoCountLabel(todoCount: number) {
   return todoCount === 1 ? '1 todo' : `${todoCount} todos`;
 }
 
-function TodoList({ todos }: TodoListProps) {
+function TodoList({ todos, onUpdateTodo }: TodoListProps) {
+  const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
   const todoCountLabel = getTodoCountLabel(todos.length);
 
   return (
@@ -30,24 +36,45 @@ function TodoList({ todos }: TodoListProps) {
         <ol className="mt-5 w-full min-w-0 divide-y divide-neutral-200 border-y border-neutral-200">
           {todos.map((todo) => (
             <li className="min-w-0 py-4" key={todo.id}>
-              <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0 flex-1 space-y-2">
-                  <p className="break-words text-base font-semibold">
-                    {todo.title}
-                  </p>
-                  {todo.description ? (
-                    <p className="break-words text-sm leading-6 text-neutral-600">
-                      {todo.description}
+              {editingTodoId === todo.id ? (
+                <TodoEditForm
+                  todo={todo}
+                  onCancel={() => setEditingTodoId(null)}
+                  onSave={(input) => {
+                    const updateResult = onUpdateTodo(input);
+
+                    if (updateResult.ok) {
+                      setEditingTodoId(null);
+                    }
+                  }}
+                />
+              ) : (
+                <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <p className="break-words text-base font-semibold">
+                      {todo.title}
                     </p>
-                  ) : null}
-                  <p className="text-xs font-medium text-neutral-500">
-                    Stored on this device
-                  </p>
+                    {todo.description ? (
+                      <p className="break-words text-sm leading-6 text-neutral-600">
+                        {todo.description}
+                      </p>
+                    ) : null}
+                    <p className="text-xs font-medium text-neutral-500">
+                      Stored on this device
+                    </p>
+                  </div>
+                  <div className="flex max-w-full shrink-0 flex-wrap items-center gap-3 sm:justify-end">
+                    <TodoStatusBadge status={todo.completed} />
+                    <button
+                      className="button-secondary"
+                      onClick={() => setEditingTodoId(todo.id)}
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </div>
-                <div className="flex max-w-full shrink-0 sm:justify-end">
-                  <TodoStatusBadge status={todo.completed} />
-                </div>
-              </div>
+              )}
             </li>
           ))}
         </ol>
