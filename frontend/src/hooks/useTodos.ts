@@ -1,10 +1,6 @@
 import { useState } from 'react';
 
-import {
-  TODO_NOT_COMPLETE_STATUS,
-  type CreateTodoInput,
-  type Todo,
-} from '../types/todo';
+import type { CreateTodoInput, Todo } from '../types/todo';
 
 export type CreateTodoResult = Todo | null;
 
@@ -32,7 +28,6 @@ export function useTodos(): UseTodosResult {
       id: createTodoId(),
       title,
       completed: false,
-      status: TODO_NOT_COMPLETE_STATUS,
       createdAt: new Date().toISOString(),
       ...(description ? { description } : {}),
     };
