@@ -32,6 +32,13 @@ export type CreateTodoInput = {
   description?: string;
 };
 
+export type UpdateTodoInput = {
+  id: string;
+  title: string;
+  description?: string;
+  status: TodoCompletion;
+};
+
 export type Todo = {
   id: string;
   title: string;
