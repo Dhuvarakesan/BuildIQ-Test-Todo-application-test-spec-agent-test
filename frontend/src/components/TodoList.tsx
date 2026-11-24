@@ -27,11 +27,11 @@ function TodoList({ todos }: TodoListProps) {
       </div>
 
       {todos.length > 0 ? (
-        <ol className="mt-5 divide-y divide-neutral-200 border-y border-neutral-200">
+        <ol className="mt-5 w-full min-w-0 divide-y divide-neutral-200 border-y border-neutral-200">
           {todos.map((todo) => (
-            <li className="py-4" key={todo.id}>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0 space-y-2">
+            <li className="min-w-0 py-4" key={todo.id}>
+              <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0 flex-1 space-y-2">
                   <p className="break-words text-base font-semibold">
                     {todo.title}
                   </p>
@@ -44,7 +44,9 @@ function TodoList({ todos }: TodoListProps) {
                     Stored on this device
                   </p>
                 </div>
-                <TodoStatusBadge completed={todo.completed} />
+                <div className="flex max-w-full shrink-0 sm:justify-end">
+                  <TodoStatusBadge status={todo.completed} />
+                </div>
               </div>
             </li>
           ))}

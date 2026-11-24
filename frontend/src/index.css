@@ -124,4 +124,20 @@
   .status-warning {
     @apply border-amber-200 bg-amber-50 text-amber-900;
   }
+
+  .status-badge {
+    @apply inline-flex max-w-full items-center justify-center whitespace-normal break-words rounded-full border px-3 py-1 text-center text-xs font-semibold leading-5;
+  }
+
+  .status-badge-not-complete {
+    @apply border-neutral-300 bg-neutral-50 text-neutral-700;
+  }
+
+  .status-badge-in-progress {
+    @apply border-amber-200 bg-amber-50 text-amber-900;
+  }
+
+  .status-badge-complete {
+    @apply border-accent-100 bg-accent-50 text-accent-800;
+  }
 }
