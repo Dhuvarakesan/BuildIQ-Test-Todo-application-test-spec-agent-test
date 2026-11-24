@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { loadTodos, saveTodos } from '../storage/todoStorage';
 import type { CreateTodoInput, Todo } from '../types/todo';
 
 export type CreateTodoResult = Todo | null;
@@ -14,7 +15,11 @@ function createTodoId() {
 }
 
 export function useTodos(): UseTodosResult {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const loadResult = loadTodos();
+
+    return loadResult.todos;
+  });
 
   const createTodo = (input: CreateTodoInput) => {
     const title = input.title.trim();
@@ -32,7 +37,10 @@ export function useTodos(): UseTodosResult {
       ...(description ? { description } : {}),
     };
 
-    setTodos((currentTodos) => [...currentTodos, todo]);
+    const nextTodos = [...todos, todo];
+
+    setTodos(nextTodos);
+    saveTodos(nextTodos);
 
     return todo;
   };
