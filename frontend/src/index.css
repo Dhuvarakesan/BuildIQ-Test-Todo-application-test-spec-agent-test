@@ -140,4 +140,20 @@
   .status-badge-complete {
     @apply border-accent-100 bg-accent-50 text-accent-800;
   }
+
+  .todo-edit-form {
+    @apply space-y-5;
+  }
+
+  .todo-edit-actions {
+    @apply flex flex-col-reverse gap-3 sm:flex-row sm:justify-end;
+  }
+
+  .button-primary {
+    @apply rounded-lg bg-accent-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-800;
+  }
+
+  .button-secondary {
+    @apply rounded-lg border border-neutral-300 bg-surface px-4 py-2 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-50;
+  }
 }
