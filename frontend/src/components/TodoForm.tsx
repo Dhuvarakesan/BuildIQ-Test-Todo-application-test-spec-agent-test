@@ -74,14 +74,14 @@ function TodoForm({ onCreateTodo, todoCount = 0 }: TodoFormProps) {
     <form className="mt-5 space-y-5" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-2">
         <label className="text-sm font-semibold" htmlFor={titleInputId}>
-          Task title <span className="text-rose-700" aria-hidden="true">*</span>
+          Task title <span className="text-accent-700" aria-hidden="true">*</span>
         </label>
         <input
           aria-describedby={titleDescriptionIds}
           aria-invalid={Boolean(titleError)}
           aria-required="true"
           autoComplete="off"
-          className="px-3 py-2 text-base aria-[invalid=true]:border-rose-500"
+          className="px-3 py-2 text-base aria-[invalid=true]:border-accent-600 aria-[invalid=true]:bg-accent-50"
           id={titleInputId}
           name="title"
           onChange={(event) => handleTitleChange(event.target.value)}
@@ -94,7 +94,7 @@ function TodoForm({ onCreateTodo, todoCount = 0 }: TodoFormProps) {
         </p>
         {titleError ? (
           <p
-            className="text-sm font-medium leading-5 text-rose-700"
+            className="rounded-lg border border-accent-200 bg-accent-50 px-3 py-2 text-sm font-medium leading-5 text-accent-800"
             id={titleErrorId}
             role="alert"
           >
@@ -126,7 +126,7 @@ function TodoForm({ onCreateTodo, todoCount = 0 }: TodoFormProps) {
           {todoCountLabel}
         </p>
         <button
-          className="rounded-lg bg-accent-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-800"
+          className="button-primary"
           type="submit"
         >
           Create todo

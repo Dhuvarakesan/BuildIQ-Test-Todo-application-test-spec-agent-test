@@ -27,13 +27,13 @@ function TodoList({ todos, onUpdateTodo }: TodoListProps) {
             Current list
           </h3>
         </div>
-        <span className="rounded-full bg-accent-50 px-3 py-1 text-sm font-medium text-accent-800">
+        <span className="rounded-full border border-accent-200 bg-accent-50 px-3 py-1 text-sm font-medium text-accent-800">
           {todoCountLabel}
         </span>
       </div>
 
       {todos.length > 0 ? (
-        <ol className="mt-5 w-full min-w-0 divide-y divide-neutral-200 border-y border-neutral-200">
+        <ol className="mt-5 w-full min-w-0 divide-y divide-accent-100 border-y border-accent-100">
           {todos.map((todo) => (
             <li className="min-w-0 py-4" key={todo.id}>
               {editingTodoId === todo.id ? (
@@ -59,7 +59,7 @@ function TodoList({ todos, onUpdateTodo }: TodoListProps) {
                         {todo.description}
                       </p>
                     ) : null}
-                    <p className="text-xs font-medium text-neutral-500">
+                    <p className="text-xs font-medium text-accent-700">
                       Stored on this device
                     </p>
                   </div>
@@ -79,7 +79,7 @@ function TodoList({ todos, onUpdateTodo }: TodoListProps) {
           ))}
         </ol>
       ) : (
-        <p className="mt-5 rounded-lg border border-dashed border-neutral-300 bg-paper px-4 py-6 text-sm leading-6 text-neutral-600">
+        <p className="mt-5 rounded-lg border border-dashed border-accent-200 bg-accent-50 px-4 py-6 text-sm leading-6 text-accent-900">
           No todos yet. Create a todo to see it appear here with a Not Complete
           status badge.
         </p>

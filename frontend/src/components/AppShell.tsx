@@ -23,15 +23,15 @@ function AppShell({ todoState }: AppShellProps) {
 
   return (
     <div className="min-h-screen bg-paper text-ink">
-      <header className="border-b border-neutral-200 bg-surface">
+      <header className="border-b border-accent-200 bg-accent-700 text-white shadow-card">
         <div
           className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-4 py-4 sm:px-6"
         >
           <div>
-            <p className="text-sm font-medium text-accent-700">Local-first</p>
+            <p className="text-sm font-medium text-accent-100">Local-first</p>
             <h1 className="text-2xl font-semibold">Simple Todo</h1>
           </div>
-          <span className="rounded-lg bg-accent-50 px-3 py-1 text-sm font-medium text-accent-800">
+          <span className="rounded-lg border border-white/30 bg-white/15 px-3 py-1 text-sm font-medium text-white">
             Private
           </span>
         </div>
@@ -83,7 +83,9 @@ function AppShell({ todoState }: AppShellProps) {
             <p className="text-sm font-medium text-accent-700">
               Current list
             </p>
-            <p className="mt-1 text-2xl font-semibold">{todoCount}</p>
+            <p className="mt-1 text-2xl font-semibold text-accent-800">
+              {todoCount}
+            </p>
             <p className="mt-2 text-sm leading-6 text-neutral-600">
               {todoCountLabel}. Newly created todos appear as{' '}
               {TODO_NOT_COMPLETE_STATUS} in the current list.

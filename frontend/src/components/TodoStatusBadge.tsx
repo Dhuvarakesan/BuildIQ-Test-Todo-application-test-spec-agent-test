@@ -11,11 +11,11 @@ const statusClassNames = {
 } as const satisfies Record<TodoCompletion, string>;
 
 function TodoStatusBadge({ status }: TodoStatusBadgeProps) {
+  const displayStatus = getTodoDisplayStatus(status);
+
   return (
-    <span
-      className={`status-badge ${statusClassNames[status]}`}
-    >
-      {getTodoDisplayStatus(status)}
+    <span className={`status-badge ${statusClassNames[status]}`}>
+      {displayStatus}
     </span>
   );
 }
