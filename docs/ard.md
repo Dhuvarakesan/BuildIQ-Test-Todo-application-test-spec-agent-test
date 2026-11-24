@@ -6,7 +6,7 @@
 
 - **Product/Application:** Simple Todo Application
 - **Document ID:** ARD-TODO
-- **Version:** 0.1
+- **Version:** 0.2
 - **Status:** Draft
 - **Architecture Owner:** TBD
 - **Contributors:** TBD
@@ -21,7 +21,7 @@ The Simple Todo Application will be implemented as a frontend-only React web app
 
 The architecture is intentionally small and maintainable for a small business first release. Presentation, todo state orchestration, and browser storage access will be separated into React UI components, a todo state hook, and a storage adapter module. The app will be hosted as static assets on Netlify or Vercel, served over HTTPS, and released when the production build succeeds and PRD Must requirements pass manual product acceptance testing.
 
-Key architecture drivers are simplicity, local-only data privacy, responsive usability, and resilience to browser storage failures.
+Key architecture drivers are simplicity, local-only data privacy, responsive usability, coherent red visual theming, and resilience to browser storage failures.
 
 ## 2. Architecture Drivers
 
@@ -33,12 +33,13 @@ Key architecture drivers are simplicity, local-only data privacy, responsive usa
 - PRD-FR-006 — Storage failure must not crash or block current-session todo creation and viewing.
 - PRD-NFR-001 — The UI must use a responsive single-column layout that works on common mobile and desktop widths.
 - PRD-NFR-002 — Todo data must remain local to the browser and must not be transmitted to a backend service.
+- PRD-NFR-003 — The UI must apply a coherent red theme across visible app chrome and interactive styling while keeping themed text and controls readable against their backgrounds.
 - CON-001 — The implementation must use React only for the frontend application.
 - CON-002 — The first release must not use a backend API or server-side persistence.
 - CON-003 — Persistence must use browser `localStorage`, with in-memory fallback for storage failure.
 - CON-004 — The first release is scoped for a small business context and should remain simple to build, test, and maintain.
 - CON-005 — There is no fixed deadline; release occurs when Must-priority requirements pass acceptance testing.
-- CON-006 — No specific accessibility requirements are defined for the first release.
+- CON-006 — No specific accessibility standard is defined for the first release; red themed text and controls must remain readable against their backgrounds.
 
 ## 3. Architecture Principles
 
@@ -75,7 +76,7 @@ Key architecture drivers are simplicity, local-only data privacy, responsive usa
 | Data | Browser `localStorage` with in-memory fallback | Browser Web Storage API; fallback state lives only for current session | Supports same-device persistence and graceful storage failure handling |
 | Hosting | Netlify or Vercel static hosting | Static assets served over HTTPS | Simple small-business deployment model for a frontend-only app |
 | Build Tooling | Vite | Version TBD at implementation time | Lightweight React build tooling suitable for static deployment |
-| Styling | Tailwind CSS | Version TBD at implementation time | Supports responsive single-column UI with low custom CSS overhead |
+| Styling | Tailwind CSS | Version TBD at implementation time; red theme values TBD | Supports responsive single-column UI and coherent red theme styling with low custom CSS overhead |
 | Language | TypeScript | Version TBD at implementation time | Provides compile-time checks for todo entity, status, and storage contracts |
 
 ## 6. Logical Architecture
@@ -84,9 +85,9 @@ Key architecture drivers are simplicity, local-only data privacy, responsive usa
 
 #### COMP-001 — Todo App Shell
 
-- **Responsibility:** Compose the single-screen application layout, connect the creation form and todo list, and surface storage error state.
+- **Responsibility:** Compose the single-screen application layout, apply the red visual theme, connect the creation form and todo list, and surface storage error state.
 - **Inputs:** User interactions from COMP-002, todo state from COMP-004, storage warnings from COMP-005.
-- **Outputs:** Rendered responsive application screen.
+- **Outputs:** Rendered responsive themed application screen.
 - **Dependencies:** COMP-002, COMP-003, COMP-004.
 - **Repository Area:** `src/App.tsx`
 
@@ -240,24 +241,25 @@ This directly satisfies same-device persistence without backend storage and pres
 - IndexedDB — More capability than needed for a simple todo list.
 - Backend database — Not allowed by PRD constraints.
 
-### ARD-DEC-005 — Tailwind CSS Responsive Single-Column UI
+### ARD-DEC-005 — Tailwind CSS Responsive Single-Column Red Themed UI
 
 - **Status:** Accepted
-- **Related Requirements:** PRD-NFR-001
+- **Related Requirements:** PRD-NFR-001, PRD-NFR-003
 
 **Decision**
 
-Use Tailwind CSS to implement a user-friendly responsive single-column layout.
+Use Tailwind CSS to implement a user-friendly responsive single-column layout and coherent red visual theme across visible app chrome and interactive styling.
 
 **Rationale**
 
-Tailwind supports responsive styling directly in the component layer and is sufficient for the simple mobile/desktop layout required by the PRD.
+Tailwind supports responsive styling directly in the component layer and is sufficient for the simple mobile/desktop layout required by the PRD. Tailwind can also apply a coherent red theme to the header, buttons, focus states, validation/error styling where appropriate, and accents without adding a heavier design system.
 
 **Consequences**
 
 - Styling remains consistent without introducing a heavier UI component framework.
 - The build must include Tailwind configuration and CSS processing.
-- Accessibility remains limited to what is implemented manually because the PRD defines no specific accessibility standard.
+- Exact red theme color values remain TBD until product defines them.
+- Themed text and controls must be manually checked for readability because no specific accessibility standard is defined.
 
 **Alternatives Considered**
 
@@ -291,7 +293,7 @@ Static hosting matches the frontend-only architecture and provides simple deploy
 ### ARD-DEC-007 — Build-Only Release-Blocking Automated Gate
 
 - **Status:** Accepted
-- **Related Requirements:** PRD-FR-001, PRD-FR-002, PRD-FR-003, PRD-FR-004, PRD-FR-005, PRD-FR-006, PRD-NFR-001, PRD-NFR-002
+- **Related Requirements:** PRD-FR-001, PRD-FR-002, PRD-FR-003, PRD-FR-004, PRD-FR-005, PRD-FR-006, PRD-NFR-001, PRD-NFR-002, PRD-NFR-003
 
 **Decision**
 
@@ -299,7 +301,7 @@ Require the production build to pass before release. Manual acceptance testing v
 
 **Rationale**
 
-The selected first-release quality gate is intentionally minimal: build must pass, while product acceptance testing confirms functional and responsive requirements.
+The selected first-release quality gate is intentionally minimal: build must pass, while product acceptance testing confirms functional, responsive, and red theme requirements.
 
 **Consequences**
 
@@ -429,6 +431,11 @@ The implementation must not:
 - **Target:** Support normal individual daily personal task usage on one device; no multi-user or cross-device scalability target is required for the first release.
 - **Validation Method:** Manual acceptance testing with multiple locally created todos and page refresh validation.
 
+### ARD-OPS-007 — Red Theme Readability
+
+- **Target:** The red themed header, primary submit button, focus states, applicable validation/error styling, accents, text, and controls remain readable and visually distinguishable against their backgrounds at representative mobile and desktop viewport widths.
+- **Validation Method:** Manual visual acceptance testing against PRD-NFR-003.
+
 ## 12. Observability
 
 - **Logging:** Browser console errors may be used during development; production user-facing errors must be clear and non-blocking for storage failures.
@@ -456,6 +463,7 @@ Required test levels:
 - End-to-end tests — Not required as automated tests; PRD user journeys are validated manually.
 - Security tests — Dependency vulnerability scanning should be run on an advisory basis; HTTPS hosting and local-only data behavior are manually verified.
 - Performance tests, where applicable — Manual validation of ARD-OPS-001, ARD-OPS-002, and ARD-OPS-003.
+- Visual theme tests, where applicable — Manual validation of ARD-OPS-007 and PRD-NFR-003.
 
 Minimum quality expectations:
 
@@ -473,10 +481,11 @@ Minimum quality expectations:
 - ARC-CON-006 — Editing, deleting, filtering, search, user accounts, sharing, and collaboration are out of scope for the first release.
 - ARC-CON-007 — The UI must use a responsive single-column layout for common mobile and desktop widths.
 - ARC-CON-008 — Release requires successful production build and acceptance of Must-priority PRD requirements; there is no fixed delivery date.
-- ARC-CON-009 — No specific accessibility standard is required for the first release.
+- ARC-CON-009 — No specific accessibility standard is defined for the first release; red themed text and controls must remain readable against their backgrounds.
 - ARC-CON-010 — The architecture must remain simple to build, test, and maintain for a small business context.
 - ARC-CON-011 — Locally stored todos are classified as Confidential user-entered local data.
 - ARC-CON-012 — No application secrets may be stored in frontend code or frontend runtime configuration.
+- ARC-CON-013 — The UI must apply a coherent red theme across visible app chrome and interactive styling, including header, buttons, focus states, validation/error styling where appropriate, and accents.
 
 ## 16. Risks and Trade-offs
 
@@ -488,6 +497,7 @@ Minimum quality expectations:
 | ARC-RISK-004 | No remote telemetry or audit logging limits production visibility | Runtime issues may only be discovered through user report or manual testing | Use host deployment logs and manual validation; consider remote error tracking only in a future privacy-reviewed release |
 | ARC-RISK-005 | Netlify versus Vercel selection remains unresolved | Deployment instructions and rollback details may vary | Treat host choice as an implementation-time decision within the approved static-hosting constraint |
 | ARC-RISK-006 | No application-layer encryption for localStorage | Local todo confidentiality depends on browser/device protections | Avoid transmitting todo data, document local-only data behavior, and do not store secrets |
+| ARC-RISK-007 | Exact red color values are not yet defined | Theme implementation may be inconsistent or require rework before visual acceptance | Track exact theme values as an open architecture question and validate the implemented red theme manually against PRD-NFR-003 |
 
 ## 17. Open Architecture Questions
 
@@ -499,6 +509,7 @@ Minimum quality expectations:
 | ARC-OQ-004 | Which static hosting provider will be selected: Netlify or Vercel? | Engineering Lead | Open | TBD at implementation time |
 | ARC-OQ-005 | What is the exact production URL and deployment ownership model? | Engineering Lead | Open | TBD |
 | ARC-OQ-006 | Who are the named Solution Architect, Security Reviewer, and Engineering Lead approvers? | Project Sponsor | Open | TBD |
+| ARC-OQ-007 | What exact red theme color values should be used for the application theme? | Product Owner | Open | TBD |
 
 ## 18. Feature Mapping
 
@@ -507,6 +518,7 @@ Minimum quality expectations:
 | FEAT-001 | COMP-001, COMP-002, COMP-004 | ARD-DEC-001, ARD-DEC-002, ARD-DEC-003, ARD-DEC-007 | ARD-API-001 | ARD-SEC-001 |
 | FEAT-002 | COMP-001, COMP-003, COMP-004 | ARD-DEC-001, ARD-DEC-002, ARD-DEC-003, ARD-DEC-005, ARD-DEC-007 | ARD-API-001 | ARD-SEC-001 |
 | FEAT-003 | COMP-004, COMP-005 | ARD-DEC-001, ARD-DEC-004, ARD-DEC-007 | ARD-API-001 | ARD-SEC-001 |
+| FEAT-004 | COMP-001, COMP-002, COMP-003 | ARD-DEC-005, ARD-DEC-007 | N/A | N/A |
 
 ## 19. Approval
 

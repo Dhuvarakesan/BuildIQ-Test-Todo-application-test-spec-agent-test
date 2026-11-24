@@ -6,7 +6,7 @@
 
 - **Product/Application:** Simple Todo Application
 - **Document ID:** PRD-TODO
-- **Version:** 0.1
+- **Version:** 0.2
 - **Status:** Draft
 - **Owner:** TBD
 - **Contributors:** TBD
@@ -16,7 +16,7 @@
 
 ## 1. Executive Summary
 
-The Simple Todo Application is a React-only web app for individual users who need a quick, friendly way to capture and view daily personal tasks. Users can create a todo with a required title and optional description, then view all created todos in a responsive list.
+The Simple Todo Application is a React-only web app for individual users who need a quick, friendly way to capture and view daily personal tasks. Users can create a todo with a required title and optional description, then view all created todos in a responsive list with a coherent red visual theme.
 
 The first release intentionally keeps scope narrow for a small business context: no backend, no user accounts, and no task editing or deletion. Todos persist locally in the browser using localStorage, and each newly created todo defaults to a Not Complete status that is visible but not editable in-app.
 
@@ -35,6 +35,7 @@ The target end state is a lightweight, responsive React Todo app that lets an in
 - Enable individual users to create daily personal todos with a required title and optional description.
 - Display created todos in a clear list showing title, description, and completion status.
 - Preserve todos after page refresh on the same device using browser localStorage.
+- Present the application with a coherent red theme across visible app chrome and interactive styling.
 - Keep the first release simple by excluding editing, deletion, filtering, search, accounts, sharing, and backend APIs.
 
 ### 4.2 Success Measures
@@ -55,6 +56,7 @@ The target end state is a lightweight, responsive React Todo app that lets an in
 - Default every new todo to Not Complete.
 - Persist todos in browser localStorage on the same device.
 - Provide a user-friendly responsive UI that works cleanly on common mobile and desktop widths with a single-column layout.
+- Apply a coherent red theme to all visible app chrome and interactive styling, including header, buttons, focus states, validation/error styling where appropriate, and accents.
 - Handle localStorage errors or unavailable browser storage with a clear non-blocking error and current-session in-memory fallback.
 
 ### 5.2 Out of Scope
@@ -84,7 +86,7 @@ The target end state is a lightweight, responsive React Todo app that lets an in
 - ASM-002 — Browser localStorage is acceptable for same-device persistence in the first release.
 - ASM-003 — The completion status in the first release is informational only and defaults to Not Complete.
 - ASM-004 — There is no measured baseline yet for task-capture pain or create/view flow completion time.
-- ASM-005 — No specific accessibility standard is required for the first release.
+- ASM-005 — No specific accessibility standard is required for the first release, but red themed text and controls are expected to remain readable against their backgrounds.
 
 ### Dependencies
 
@@ -255,6 +257,21 @@ The system shall store todos locally in the browser and shall not transmit todo 
 1. Creating a todo stores the todo in browser-local storage or in-memory fallback only.
 2. During create and view flows, no backend API request is required for todo data persistence or retrieval.
 
+### PRD-NFR-003 — Red Visual Theme
+
+- **Category:** Usability
+- **Priority:** Must
+
+**Requirement**
+
+The system shall apply a coherent red theme to all visible app chrome and interactive styling, including header, buttons, focus states, validation/error styling where appropriate, and accents, while keeping themed text and controls readable against their backgrounds.
+
+**Acceptance Criteria**
+
+1. The application header, primary submit button, focus states, applicable validation/error styling, and accents use a coherent red visual theme.
+2. The create form, todo list, validation/error messages, and storage error message remain readable when the red theme is applied.
+3. At representative mobile and desktop viewport widths, themed controls and text remain visually distinguishable from their backgrounds.
+
 ## 10. User Journeys
 
 ### JOURNEY-001 — Create and View a Todo
@@ -265,7 +282,7 @@ The system shall store todos locally in the browser and shall not transmit todo 
 4. The new todo appears in the list with its title, optional description, and Not Complete status.
 5. The user refreshes the page and sees the todo still listed on the same device when localStorage is available.
 
-**Related Requirements:** PRD-FR-001, PRD-FR-003, PRD-FR-004, PRD-FR-005, PRD-NFR-001, PRD-NFR-002
+**Related Requirements:** PRD-FR-001, PRD-FR-003, PRD-FR-004, PRD-FR-005, PRD-NFR-001, PRD-NFR-002, PRD-NFR-003
 
 ### JOURNEY-002 — Attempt to Create Todo Without Title
 
@@ -274,7 +291,7 @@ The system shall store todos locally in the browser and shall not transmit todo 
 3. The user submits the form.
 4. The app displays an inline error and does not add a todo to the list.
 
-**Related Requirements:** PRD-FR-002, PRD-NFR-001
+**Related Requirements:** PRD-FR-002, PRD-NFR-001, PRD-NFR-003
 
 ### JOURNEY-003 — Continue During Storage Failure
 
@@ -283,7 +300,7 @@ The system shall store todos locally in the browser and shall not transmit todo 
 3. The app shows a non-blocking storage error.
 4. The todo remains visible during the current session without crashing the app.
 
-**Related Requirements:** PRD-FR-006, PRD-NFR-002
+**Related Requirements:** PRD-FR-006, PRD-NFR-002, PRD-NFR-003
 
 ## 11. Feature Breakdown
 
@@ -291,22 +308,29 @@ The system shall store todos locally in the browser and shall not transmit todo 
 
 - **Summary:** Provides fields for title and optional description, validates required title, and creates todos.
 - **Priority:** Must
-- **Related Requirements:** PRD-FR-001, PRD-FR-002, PRD-NFR-001
+- **Related Requirements:** PRD-FR-001, PRD-FR-002, PRD-NFR-001, PRD-NFR-003
 - **Expected Spec File:** `specs/FEAT-001-todo-creation-form.spec.md`
 
 ### FEAT-002 — Todo List Display
 
 - **Summary:** Displays all created todos with title, optional description, and Not Complete status.
 - **Priority:** Must
-- **Related Requirements:** PRD-FR-003, PRD-FR-004, PRD-NFR-001
+- **Related Requirements:** PRD-FR-003, PRD-FR-004, PRD-NFR-001, PRD-NFR-003
 - **Expected Spec File:** `specs/FEAT-002-todo-list-display.spec.md`
 
 ### FEAT-003 — Local Persistence
 
 - **Summary:** Saves todos to browser localStorage and handles unavailable storage with current-session fallback.
 - **Priority:** Must
-- **Related Requirements:** PRD-FR-005, PRD-FR-006, PRD-NFR-002
+- **Related Requirements:** PRD-FR-005, PRD-FR-006, PRD-NFR-002, PRD-NFR-003
 - **Expected Spec File:** `specs/FEAT-003-local-persistence.spec.md`
+
+### FEAT-004 — Red Visual Theme
+
+- **Summary:** Applies a coherent red visual theme across visible app chrome and interactive styling while preserving readability.
+- **Priority:** Must
+- **Related Requirements:** PRD-NFR-003
+- **Expected Spec File:** `specs/FEAT-004-red-visual-theme.spec.md`
 
 ## 12. Constraints
 
@@ -315,7 +339,7 @@ The system shall store todos locally in the browser and shall not transmit todo 
 - CON-003 — Persistence must use browser localStorage, with in-memory fallback for storage failure.
 - CON-004 — The first release is scoped for a small business context and should remain simple to build, test, and maintain.
 - CON-005 — There is no fixed deadline; release occurs when Must-priority requirements pass acceptance testing.
-- CON-006 — No specific accessibility requirements are defined for the first release.
+- CON-006 — No specific accessibility standard is defined for the first release; red themed text and controls must remain readable against their backgrounds.
 
 ## 13. Risks
 
@@ -324,6 +348,7 @@ The system shall store todos locally in the browser and shall not transmit todo 
 | RISK-001 | localStorage may be unavailable, disabled, or cleared by the browser | Medium | Medium | Show a non-blocking error and keep current-session todos in memory |
 | RISK-002 | Users may expect editing, deletion, or completion toggling because they are common todo app behaviors | Medium | Medium | Keep first-release scope explicit and document these capabilities as out of scope |
 | RISK-003 | Lack of measured baseline may make success evaluation subjective | Medium | High | Capture observed create/view completion time during acceptance or user testing |
+| RISK-004 | Exact red color values are not yet defined, which may cause inconsistent theme implementation | Low | Medium | Define final theme values before visual acceptance testing or record accepted values in the feature specification |
 
 ## 14. Open Questions
 
@@ -332,6 +357,7 @@ The system shall store todos locally in the browser and shall not transmit todo 
 | OQ-001 | What is the measured baseline time for a user to add and see a todo without instructions? | Product Owner | Open | TBD |
 | OQ-002 | Who is the named product owner for this PRD? | Product Owner | Open | TBD |
 | OQ-003 | Who are the named contributors for this PRD? | Product Owner | Open | TBD |
+| OQ-004 | What exact red theme color values should be used for the application theme? | Product Owner | Open | TBD |
 
 ## 15. Release and Rollout Considerations
 
@@ -347,6 +373,7 @@ The product is successful when:
 - A user can add and see a todo in under 30 seconds without instructions.
 - Todos created with valid titles are visible in the list with title, optional description, and Not Complete status.
 - Todos persist after refresh on the same device when localStorage is available.
+- The application presents a coherent red theme while keeping themed text and controls readable against their backgrounds.
 - All Must-priority requirements are accepted.
 - Required quality, security, and compliance outcomes are evidenced.
 
